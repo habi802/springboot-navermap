@@ -1,3 +1,8 @@
 spring:
   application:
     name: navermap
+
+naver:
+  map:
+    app-key: ${NAVER_MAP_APP_KEY}
+    secret-key: ${NAVER_MAP_SECRET_KEY}

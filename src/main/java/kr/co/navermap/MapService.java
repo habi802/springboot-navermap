@@ -1,11 +1,14 @@
 package kr.co.navermap;
 
+import kr.co.navermap.model.DirectionResponse;
 import kr.co.navermap.model.GeocodeResponse;
-import kr.co.navermap.model.location.LocationInfo;
+import kr.co.navermap.model.LocationInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -13,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MapService {
     private final GeocodeFeignClient geocodeFeignClient;
+    private final DirectionFeignClient directionFeignClient;
 
     private final List<LocationInfo> locations = List.of(
         new LocationInfo("세연콩국", "대구 중구 명덕로 173", 15000),
@@ -33,6 +37,19 @@ public class MapService {
         GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(address);
         log.info("myGeocode: {}", myGeocode);
 
-        return null;
+        for (LocationInfo location : locations) {
+            GeocodeResponse goalGeocode = geocodeFeignClient.getGeocode(location.getAddress());
+
+            String myLatLng = myGeocode.getAddresses().get(0).getX() + "," + myGeocode.getAddresses().get(0).getY();
+            String goalLatLng = goalGeocode.getAddresses().get(0).getX() + "," + goalGeocode.getAddresses().get(0).getY();
+
+            DirectionResponse direction = directionFeignClient.getDirection(goalLatLng, myLatLng, "trafast");
+            location.setDistance(direction.getRoute().getTrafast().get(0).getSummary().getDistance());
+        }
+
+        List<LocationInfo> result = new ArrayList<>(locations);
+        result.sort(Comparator.comparingInt(LocationInfo::getDistance));
+
+        return result;
     }
 }

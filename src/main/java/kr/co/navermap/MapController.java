@@ -1,6 +1,6 @@
 package kr.co.navermap;
 
-import kr.co.navermap.model.location.LocationInfo;
+import kr.co.navermap.model.LocationInfo;
 import kr.co.navermap.model.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

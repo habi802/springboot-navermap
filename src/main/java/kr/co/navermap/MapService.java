@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Slf4j
@@ -31,10 +29,10 @@ public class MapService {
 
     // 주소 정렬하는 메소드
     public List<LocationInfo> sortDistance(String address) {
-        String myAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
-
-        GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(myAddress);
+        // 내가 입력한 주소의 좌표를 구함
+        GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(address);
         log.info("myGeocode: {}", myGeocode);
+
         return null;
     }
 }

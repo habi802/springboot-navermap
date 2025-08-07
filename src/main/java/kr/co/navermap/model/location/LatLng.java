@@ -1,4 +1,4 @@
-package kr.co.navermap.model;
+package kr.co.navermap.model.location;
 
 import lombok.AllArgsConstructor;
 

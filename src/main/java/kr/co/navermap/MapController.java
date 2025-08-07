@@ -1,10 +1,12 @@
 package kr.co.navermap;
 
+import kr.co.navermap.model.location.LocationInfo;
 import kr.co.navermap.model.ResultResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,8 +19,8 @@ public class MapController {
     private final MapService mapService;
 
     @GetMapping
-    public ResultResponse<?> maps() {
-        List<String> result = mapService.getDistance();
-        return new ResultResponse<List<String>>("", result);
+    public ResultResponse<?> maps(@RequestParam String address) {
+        List<LocationInfo> result = mapService.sortDistance(address);
+        return new ResultResponse<List<LocationInfo>>("경로 정렬 완료!", result);
     }
 }

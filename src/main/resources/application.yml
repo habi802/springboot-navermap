@@ -2,7 +2,9 @@ spring:
   application:
     name: navermap
 
-naver:
-  map:
-    app-key: ${NAVER_MAP_APP_KEY}
-    secret-key: ${NAVER_MAP_SECRET_KEY}
+constants:
+  naver-map:
+      geocode-url: https://maps.apigw.ntruss.com/map-geocode/v2/geocode
+      direction-url: https://maps.apigw.ntruss.com/map-direction/v1/driving
+      app-key: ${NAVER_MAP_APP_KEY}
+      secret-key: ${NAVER_MAP_SECRET_KEY}

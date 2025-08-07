@@ -37,6 +37,7 @@ public class MapService {
         GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(address);
         log.info("myGeocode: {}", myGeocode);
 
+        // 내 주소와 locations의 주소 사이의 거리를 구하는 작업
         for (LocationInfo location : locations) {
             GeocodeResponse goalGeocode = geocodeFeignClient.getGeocode(location.getAddress());
 
@@ -47,6 +48,8 @@ public class MapService {
             location.setDistance(direction.getRoute().getTrafast().get(0).getSummary().getDistance());
         }
 
+        // locations는 final 타입이라 새로운 List를 선언한 뒤,
+        // 그 List를 distance가 작은 순으로 정렬함
         List<LocationInfo> result = new ArrayList<>(locations);
         result.sort(Comparator.comparingInt(LocationInfo::getDistance));
 

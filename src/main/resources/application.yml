@@ -1,10 +1,9 @@
 spring:
   application:
     name: navermap
-
-constants:
-  naver-map:
-      geocode-url: https://maps.apigw.ntruss.com/map-geocode/v2/geocode
-      direction-url: https://maps.apigw.ntruss.com/map-direction/v1/driving
-      app-key: ${NAVER_MAP_APP_KEY}
-      secret-key: ${NAVER_MAP_SECRET_KEY}
+  datasource:
+    url: jdbc:mariadb://localhost/gallery
+    username: root
+    password: green502
+  config:
+    import: optional:classpath:application-secret.yml

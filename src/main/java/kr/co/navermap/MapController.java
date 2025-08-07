@@ -20,7 +20,8 @@ public class MapController {
 
     @GetMapping
     public ResultResponse<?> maps(@RequestParam String address) {
+        log.info("myAddress: {}", address);
         List<LocationInfo> result = mapService.sortDistance(address);
-        return new ResultResponse<List<LocationInfo>>("경로 정렬 완료!", result);
+        return new ResultResponse<>("경로 정렬 완료!", result);
     }
 }

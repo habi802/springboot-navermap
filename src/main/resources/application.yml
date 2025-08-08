@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: navermap
-  datasource:
-    url: jdbc:mariadb://localhost/gallery
-    username: root
-    password: green502
-  config:
-    import: optional:classpath:application-secret.yml

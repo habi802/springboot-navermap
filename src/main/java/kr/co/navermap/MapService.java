@@ -5,6 +5,7 @@ import kr.co.navermap.model.GeocodeResponse;
 import kr.co.navermap.model.LocationInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class MapService {
     );
 
     // 주소 정렬하는 메소드
+    @Cacheable(value = "directionCache", key = "#address")
     public List<LocationInfo> sortDistance(String address) {
         // 내가 입력한 주소의 좌표를 구함
         GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(address);

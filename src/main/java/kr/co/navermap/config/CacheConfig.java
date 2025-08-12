@@ -3,10 +3,13 @@ package kr.co.navermap.config;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -14,11 +17,28 @@ import java.util.concurrent.TimeUnit;
 public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("direction");
+//        SimpleCacheManager cacheManager = new SimpleCacheManager();
+//
+//        CaffeineCache geocodeCache = new CaffeineCache("geocodeCache",
+//                Caffeine.newBuilder()
+//                        .expireAfterWrite(1, TimeUnit.DAYS)
+//                        .maximumSize(1000)
+//                        .build()
+//        );
+//
+//        CaffeineCache directionCache = new CaffeineCache("directionCache",
+//                Caffeine.newBuilder()
+//                        .expireAfterWrite(1, TimeUnit.DAYS)
+//                        .maximumSize(1000)
+//                        .build()
+//        );
+//        cacheManager.setCaches(Arrays.asList(geocodeCache, directionCache));
+
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("geocodeCache", "directionCache");
         cacheManager.setCaffeine(
             Caffeine.newBuilder()
                     .expireAfterWrite(1, TimeUnit.DAYS)
-                    .maximumSize(200)
+                    .maximumSize(1000)
         );
         return cacheManager;
     }

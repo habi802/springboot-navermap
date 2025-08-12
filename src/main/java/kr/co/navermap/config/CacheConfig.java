@@ -34,11 +34,13 @@ public class CacheConfig {
 //        );
 //        cacheManager.setCaches(Arrays.asList(geocodeCache, directionCache));
 
+        // 캐시 최대 보관 기간: 1일
+        // 캐시 최대 보관 개수: 1,000개
         CaffeineCacheManager cacheManager = new CaffeineCacheManager("geocodeCache", "directionCache");
         cacheManager.setCaffeine(
             Caffeine.newBuilder()
                     .expireAfterWrite(1, TimeUnit.DAYS)
-                    .maximumSize(1000)
+                    .maximumSize(1_000)
         );
         return cacheManager;
     }

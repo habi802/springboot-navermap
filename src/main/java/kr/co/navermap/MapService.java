@@ -32,21 +32,20 @@ public class MapService {
         new LocationInfo("크라운감자탕", "대구 중구 대봉동 25-7", 16000)
     );
 
-    // 주소 정렬하는 메소드
-    @Cacheable(value = "directionCache", key = "#address")
+    // 10개의 주소를 내가 입력한 주소와 가까운 순으로 정렬하는 메소드
     public List<LocationInfo> sortDistance(String address) {
         // 내가 입력한 주소의 좌표를 구함
-        GeocodeResponse myGeocode = geocodeFeignClient.getGeocode(address);
+        GeocodeResponse myGeocode = getGeocode(address);
         log.info("myGeocode: {}", myGeocode);
 
         // 내 주소와 locations의 주소 사이의 거리를 구하는 작업
         for (LocationInfo location : locations) {
-            GeocodeResponse goalGeocode = geocodeFeignClient.getGeocode(location.getAddress());
+            GeocodeResponse goalGeocode = getGeocode(location.getAddress());
 
             String myLatLng = myGeocode.getAddresses().get(0).getX() + "," + myGeocode.getAddresses().get(0).getY();
             String goalLatLng = goalGeocode.getAddresses().get(0).getX() + "," + goalGeocode.getAddresses().get(0).getY();
 
-            DirectionResponse direction = directionFeignClient.getDirection(goalLatLng, myLatLng, "trafast");
+            DirectionResponse direction = getDirection(myLatLng, goalLatLng);
             location.setDistance(direction.getRoute().getTrafast().get(0).getSummary().getDistance());
         }
 
@@ -56,5 +55,17 @@ public class MapService {
         result.sort(Comparator.comparingInt(LocationInfo::getDistance));
 
         return result;
+    }
+
+    // 좌표를 구하는 메소드
+    @Cacheable(value = "geocodeCache", key = "#address")
+    public GeocodeResponse getGeocode(String address) {
+        return geocodeFeignClient.getGeocode(address);
+    }
+
+    // 거리를 계산하는 메소드
+    @Cacheable(value = "directionCache", key = "#start + '_' + #goal")
+    public DirectionResponse getDirection(String start, String goal) {
+        return directionFeignClient.getDirection(goal, start, "trafast");
     }
 }
